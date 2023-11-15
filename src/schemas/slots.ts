@@ -1,3 +1,5 @@
+import { InferSchemaType } from "mongoose";
+
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -10,10 +12,15 @@ const slotSchema = new Schema({
         type: Date,
         required: [true, "Date and time must be registered"]
     },
-    availability: {
+    available: {
+        type: Boolean,
+        default: true
+    },
+    booked: {
         type: Boolean,
         default: false
     }
 });
 
-module.exports = mongoose.model("Slots", slotSchema);
+export default mongoose.model("Slot", slotSchema);
+export type Slot=InferSchemaType<typeof slotSchema>;
