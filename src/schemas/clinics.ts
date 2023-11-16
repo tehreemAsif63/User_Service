@@ -25,4 +25,4 @@ const clinicSchema = new Schema({
 });
 
 export default mongoose.model("Clinics", clinicSchema);
-export type Slot=InferSchemaType<typeof clinicSchema>;
+export type Clinic=InferSchemaType<typeof clinicSchema>;

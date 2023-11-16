@@ -1,4 +1,4 @@
-import mongoose, { Schema,InferSchemaType } from "mongoose";
+import mongoose, { Schema, InferSchemaType } from "mongoose";
 
 const userSchema = new Schema({
   firstName: {
@@ -9,8 +9,7 @@ const userSchema = new Schema({
     type: String,
     required: [true, "Last name must be entered"],
   },
-  SSN: { type: String, required: true 
-},
+  SSN: { type: String, required: true, unique: true },
   postCode: {
     type: Number,
     required: true,
@@ -38,4 +37,4 @@ const userSchema = new Schema({
 
 export default mongoose.model("User", userSchema);
 
-export type User=InferSchemaType<typeof userSchema>;
+export type User = InferSchemaType<typeof userSchema>;

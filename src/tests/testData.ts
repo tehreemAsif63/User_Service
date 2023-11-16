@@ -1,10 +1,10 @@
-const mongoURI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/ToothFerry";
+const  mongoURI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/ToothFerry";
 
-const mongoose = require("mongoose");
-const User = require("../schemas/users");
-const Dentist = require("../schemas/dentists");
-const Slot = require("../schemas/slots");
-const Clinic = require("../schemas/clinics");
+import mongoose from "mongoose";
+import  User from"../schemas/users";
+import  Dentist from"../schemas/dentists";
+import  Slot from"../schemas/slots";
+import  Clinic from"../schemas/clinics";
 
 async function insertData() {
     const connection = await mongoose.connect(mongoURI);
@@ -57,7 +57,7 @@ async function insertData() {
         await insertData();
     } catch (err) {
         console.error(`Failed to connect to MongoDB with URI: ${mongoURI}`);
-        console.error(err.stack);
+        console.error(err);
         process.exit(1);
     }
 });
