@@ -2,7 +2,7 @@ import UserSchema, { User } from "../schemas/users";
 import { MessageException } from "../exceptions/MessageException";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { MessageHandler } from "../utilities/types-utils";
+import { MessageHandler,MessageData } from "../utilities/types-utils";
 
 const createUser: MessageHandler = async (data) => {
   const { firstName, lastName, SSN, email, password, admin, postCode, theme } =
@@ -42,7 +42,7 @@ const createUser: MessageHandler = async (data) => {
     lastName,
     SSN,
     email,
-    //password: correct password,
+    //password,
     admin,
     postCode,
   });
@@ -97,4 +97,76 @@ const login: MessageHandler = async (data) => {
     });
   }
 };
-export default { createUser, login };
+
+// return user with a specific ID
+const getUser:MessageHandler =async  (data)=> {
+  
+  const {user_id}= data;
+    const user = await UserSchema.findById(user_id)
+
+    if (!user) {
+      throw new MessageException({
+        code: 400,
+        message: 'Invalid user ID',
+      })
+    }
+
+    if (user === null) {
+      throw new MessageException({
+        code: 400,
+        message: 'User does not exist',
+      })
+    }
+
+    return user
+  }
+
+  // delete user with a specific ID
+const deleteUser: MessageHandler = async  (data)=> {
+  
+    const {user_id}= data;
+    
+    const user = await UserSchema.findByIdAndDelete(user_id)
+
+    if (!user) {
+      throw new MessageException({
+        code: 400,
+        message: 'Invalid id',
+      })
+    }
+
+    if (user === null) {
+      throw new MessageException({
+        code: 400,
+        message: 'User does not exist',
+      })
+    }
+
+    return 'User has been deleted'
+  }
+
+// updates a user given the ID
+  const  updateUser :MessageHandler=async (data)=> {
+  
+    const { user_id, firstName, lastName, SSN, email, postCode} = data
+    const user = await UserSchema.findByIdAndUpdate(
+      user_id,
+      { firstName, lastName, SSN, email, postCode},
+      { new: true }
+    )
+    return user
+  
+}
+
+ const verifyToken:MessageHandler=async (data)=> {
+  
+    const parsed = JSON.stringify(data)
+    const token = JSON.parse(parsed)
+    const decoded = jwt.verify(token.token, 'secret')
+    return decoded
+  
+}
+
+
+
+export default { createUser, login,getUser,deleteUser,updateUser,verifyToken };

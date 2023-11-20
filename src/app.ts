@@ -13,6 +13,11 @@ const client = mqtt.connect(process.env.MQTT_URI || "mqtt://localhost:1883");
 const messageMapping: { [key: string]: MessageHandler } = {
   "auth/user/create": userController.createUser,
   "auth/user/login": userController.login,
+  "auth/user/me/id:": userController.getUser,
+  "auth/user/update/id:": userController.updateUser,
+  "auth/user/delete/id:": userController.deleteUser,
+  "auth/user/verify": userController.verifyToken,
+
 };
 
 client.on("connect", () => {
