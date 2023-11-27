@@ -86,7 +86,7 @@ const login: MessageHandler = async (data) => {
     });
   }
 
-  // if user exists and passwords match, then create and assign user token
+  // if user exists and passwords match
   if (!(await bcrypt.compare(password, user.password))) {
     throw new MessageException({
       code: 401,
@@ -99,6 +99,7 @@ const login: MessageHandler = async (data) => {
 // return user with a specific ID
 const getUser: MessageHandler = async (data) => {
   const { user_id } = data;
+  console.log("I am here",data.requestInfo?.user)
   const user = await UserSchema.findById(user_id);
 
   if (!user) {

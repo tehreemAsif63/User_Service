@@ -31,7 +31,7 @@ client.on("message", async (topic, message) => {
       message.toString()
     ) as MessagePayload;
     try {
-      console.log("here",payload)
+      
       const result = await handler(payload);
       client.publish(responseTopic, JSON.stringify({data:result}), { qos: 2 });
     } catch (error) {
