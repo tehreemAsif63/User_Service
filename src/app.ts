@@ -11,30 +11,30 @@ const mongoURI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/Users";
 const client = mqtt.connect(process.env.MQTT_URI || "mqtt://localhost:1883");
 
 const messageMapping: { [key: string]: MessageHandler } = {
-  "auth/user/create": userController.createUser,
-  "auth/user/login": userController.login,
-  "auth/user/me/id:": userController.getUser,
-  "auth/user/update/id:": userController.updateUser,
-  "auth/user/delete/id:": userController.deleteUser,
-  "auth/user/verify": userController.verifyToken,
-
+  "users/create": userController.createUser,
+  "users/login": userController.login,
+  "users/me/:user_id": userController.getUser,
+  "users/update/:user_id": userController.updateUser,
+  "users/delete/:user_id": userController.deleteUser,
+  "users/verify": userController.verifyToken,
 };
 
 client.on("connect", () => {
-  client.subscribe("auth/#");
+  client.subscribe("users/#");
 });
 
 client.on("message", async (topic, message) => {
   console.log(message.toString());
   const handler = messageMapping[topic];
   if (handler) {
-    const {payload,responseTopic} = JSON.parse(message.toString()) as MessagePayload;
+    const { payload, responseTopic } = JSON.parse(
+      message.toString()
+    ) as MessagePayload;
     try {
-      console.log("I gotcha");
+      console.log("here",payload)
       const result = await handler(payload);
-      client.publish(responseTopic, JSON.stringify(result), { qos: 2 });
+      client.publish(responseTopic, JSON.stringify({data:result}), { qos: 2 });
     } catch (error) {
-      console.log(error);
       if (error instanceof MessageException) {
         client.publish(
           responseTopic,

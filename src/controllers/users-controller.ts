@@ -2,7 +2,7 @@ import UserSchema, { User } from "../schemas/users";
 import { MessageException } from "../exceptions/MessageException";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import { MessageHandler,MessageData } from "../utilities/types-utils";
+import { MessageHandler, MessageData } from "../utilities/types-utils";
 
 const createUser: MessageHandler = async (data) => {
   const { firstName, lastName, SSN, email, password, admin, postCode, theme } =
@@ -10,7 +10,15 @@ const createUser: MessageHandler = async (data) => {
 
   // validate the data of the patient
   if (
-    !(firstName && lastName && SSN && email && password && admin && postCode)
+    !(
+      firstName &&
+      lastName &&
+      SSN &&
+      email &&
+      password &&
+      typeof admin === "boolean" &&
+      postCode
+    )
   ) {
     // throw
     throw new MessageException({
@@ -36,24 +44,20 @@ const createUser: MessageHandler = async (data) => {
       message: "Password is wrong",
     });
   }
-
+  const passwordHash = await bcrypt.hash(`${password}`, 10);
   const user = new UserSchema({
     firstName,
     lastName,
     SSN,
     email,
-    //password,
+    password: passwordHash,
     admin,
     postCode,
   });
-  const token = jwt.sign({ userID: user._id, SSN, email }, "secret", {
-    expiresIn: "3h",
-  });
+
   user.save();
 
-  //connect to database
-
-  return { ...user.$assertPopulated, token };
+  return user;
 };
 
 // user login
@@ -77,96 +81,89 @@ const login: MessageHandler = async (data) => {
   const user = await UserSchema.findOne({ SSN, email });
   if (!user) {
     throw new MessageException({
-      code: 401,
+      code: 404,
       message: "Invalid records",
     });
   }
 
   // if user exists and passwords match, then create and assign user token
-  if (user && (await bcrypt.compare(password, user.password))) {
-    // Create token
-    const token = jwt.sign({ user_id: user._id, SSN, email }, "secret", {
-      expiresIn: "3h",
-    });
-    // save user token
-    return { ...user.$assertPopulated, token };
-  } else {
+  if (!(await bcrypt.compare(password, user.password))) {
     throw new MessageException({
       code: 401,
       message: "Invalid records",
     });
   }
+  return user;
 };
 
 // return user with a specific ID
-const getUser:MessageHandler =async  (data)=> {
-  
-  const {user_id}= data;
-    const user = await UserSchema.findById(user_id)
+const getUser: MessageHandler = async (data) => {
+  const { user_id } = data;
+  const user = await UserSchema.findById(user_id);
 
-    if (!user) {
-      throw new MessageException({
-        code: 400,
-        message: 'Invalid user ID',
-      })
-    }
-
-    if (user === null) {
-      throw new MessageException({
-        code: 400,
-        message: 'User does not exist',
-      })
-    }
-
-    return user
+  if (!user) {
+    throw new MessageException({
+      code: 400,
+      message: "Invalid user ID",
+    });
   }
 
-  // delete user with a specific ID
-const deleteUser: MessageHandler = async  (data)=> {
-  
-    const {user_id}= data;
-    
-    const user = await UserSchema.findByIdAndDelete(user_id)
-
-    if (!user) {
-      throw new MessageException({
-        code: 400,
-        message: 'Invalid id',
-      })
-    }
-
-    if (user === null) {
-      throw new MessageException({
-        code: 400,
-        message: 'User does not exist',
-      })
-    }
-
-    return 'User has been deleted'
+  if (user === null) {
+    throw new MessageException({
+      code: 400,
+      message: "User does not exist",
+    });
   }
+
+  return user;
+};
+
+// delete user with a specific ID
+const deleteUser: MessageHandler = async (data) => {
+  const { user_id } = data;
+
+  const user = await UserSchema.findByIdAndDelete(user_id);
+
+  if (!user) {
+    throw new MessageException({
+      code: 400,
+      message: "Invalid id",
+    });
+  }
+
+  if (user === null) {
+    throw new MessageException({
+      code: 400,
+      message: "User does not exist",
+    });
+  }
+
+  return "User deleted";
+};
 
 // updates a user given the ID
-  const  updateUser :MessageHandler=async (data)=> {
-  
-    const { user_id, firstName, lastName, SSN, email, postCode} = data
-    const user = await UserSchema.findByIdAndUpdate(
-      user_id,
-      { firstName, lastName, SSN, email, postCode},
-      { new: true }
-    )
-    return user
-  
-}
+const updateUser: MessageHandler = async (data) => {
+  const { user_id, firstName, lastName, SSN, email, postCode } = data;
+  const user = await UserSchema.findByIdAndUpdate(
+    user_id,
+    { firstName, lastName, SSN, email, postCode },
+    { new: true }
+  );
+  return user;
+};
 
- const verifyToken:MessageHandler=async (data)=> {
-  
-    const parsed = JSON.stringify(data)
-    const token = JSON.parse(parsed)
-    const decoded = jwt.verify(token.token, 'secret')
-    return decoded
-  
-}
+const verifyToken: MessageHandler = async (data) => {
+  const parsed = JSON.stringify(data);
+  const token = JSON.parse(parsed);
+  const decoded = jwt.verify(token.token, "secret");
+  return decoded;
+};
 
-
-
-export default { createUser, login,getUser,deleteUser,updateUser,verifyToken };
+export default {
+  createUser,
+  login,
+  getUser,
+  deleteUser,
+  updateUser,
+  verifyToken,
+};

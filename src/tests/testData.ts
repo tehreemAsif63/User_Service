@@ -1,9 +1,9 @@
 const mongoURI =
-  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/ToothFerry";
+  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/Users";
 
 import mongoose from "mongoose";
 import User from "../schemas/users";
-import Slot from "../schemas/slots";
+
 
 async function insertData() {
   const connection = await mongoose.connect(mongoURI);
@@ -13,12 +13,7 @@ async function insertData() {
     await mongoose.connection.dropDatabase();
     console.log("DB dropped");
 
-    // Test data for each schemas
-    const slot = await new Slot({
-      time: "2023-12-01T13:00:00",
-    }).save();
-    console.log("Inserted a test slot");
-    const slotId = slot._id;
+    // Test data for  schemas
 
     const user = await new User({
       firstName: "Test",
