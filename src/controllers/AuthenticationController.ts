@@ -1,4 +1,4 @@
-var express = require("express");
+/**var express = require("express");
 var mongoose = require("mongoose");
 var router = express.Router();
 var bcrypt = require("bcryptjs");
@@ -58,4 +58,4 @@ router.post("/login", async (req, res, next) => {
 
 
 
-module.exports = router;
+module.exports = router;**/
