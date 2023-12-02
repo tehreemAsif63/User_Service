@@ -16,6 +16,8 @@ const messageMapping: { [key: string]: MessageHandler } = {
   "users/me/:user_id": userController.getUser,
   "users/update/:user_id": userController.updateUser,
   "users/delete/:user_id": userController.deleteUser,
+  "users/delete": userController.deleteAllUsers,
+
 };
 
 client.on("connect", () => {

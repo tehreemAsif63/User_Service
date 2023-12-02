@@ -8,16 +8,7 @@ const createUser: MessageHandler = async (data) => {
   const { firstName, lastName, SSN, email, password, theme } = data;
 
   // validate the data of the patient
-  if (
-    !(
-      firstName &&
-      lastName &&
-      SSN &&
-      email &&
-      password&&
-      theme 
-    )
-  ) {
+  if (!(firstName && lastName && SSN && email && password && theme)) {
     // throw
     throw new MessageException({
       code: 403,
@@ -49,7 +40,7 @@ const createUser: MessageHandler = async (data) => {
     SSN,
     email,
     password: passwordHash,
-    theme
+    theme,
   });
 
   user.save();
@@ -116,9 +107,20 @@ const getUser: MessageHandler = async (data, requestInfo) => {
   return user;
 };
 
+// updates a user given the ID
+const updateUser: MessageHandler = async (data) => {
+  const { user_id, firstName, lastName, SSN, email, password } = data;
+  const user = await UserSchema.findByIdAndUpdate(
+    user_id,
+    { firstName, lastName, SSN, email, password },
+    { new: true }
+  );
+  return user;
+};
+
 // delete user with a specific ID
 const deleteUser: MessageHandler = async (data) => {
- /* if(!requestInfo.user?.admin){
+  /* if(!requestInfo.user?.admin){
     throw new MessageException({
       code: 403,
       message: "Forbidden",
@@ -145,16 +147,25 @@ const deleteUser: MessageHandler = async (data) => {
 
   return "User deleted";
 };
+// delete all users
+const deleteAllUsers: MessageHandler = async (data, requestInfo) => {
+  if (!requestInfo.user?.admin) {
+    throw new MessageException({
+      code: 403,
+      message: "Forbidden",
+    });
+  }
 
-// updates a user given the ID
-const updateUser: MessageHandler = async (data) => {
-  const { user_id, firstName, lastName, SSN, email,password} = data;
-  const user = await UserSchema.findByIdAndUpdate(
-    user_id,
-    { firstName, lastName, SSN, email, password},
-    { new: true }
-  );
-  return user;
+  await UserSchema.deleteMany(data);
+
+  if (UserSchema === null) {
+    throw new MessageException({
+      code: 400,
+      message: "DataBase already empty",
+    });
+  }
+
+  return "All Users deleted";
 };
 
 export default {
@@ -163,4 +174,5 @@ export default {
   getUser,
   deleteUser,
   updateUser,
+  deleteAllUsers
 };
