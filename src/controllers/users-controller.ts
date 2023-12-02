@@ -5,8 +5,7 @@ import bcrypt from "bcrypt";
 import { MessageHandler, MessageData } from "../utilities/types-utils";
 
 const createUser: MessageHandler = async (data) => {
-  const { firstName, lastName, SSN, email, password, admin, postCode, theme } =
-    data;
+  const { firstName, lastName, SSN, email, password, theme } = data;
 
   // validate the data of the patient
   if (
@@ -15,9 +14,8 @@ const createUser: MessageHandler = async (data) => {
       lastName &&
       SSN &&
       email &&
-      password &&
-      typeof admin === "boolean" &&
-      postCode
+      password&&
+      theme 
     )
   ) {
     // throw
@@ -51,8 +49,7 @@ const createUser: MessageHandler = async (data) => {
     SSN,
     email,
     password: passwordHash,
-    admin,
-    postCode,
+    theme
   });
 
   user.save();
@@ -97,9 +94,9 @@ const login: MessageHandler = async (data) => {
 };
 
 // return user with a specific ID
-const getUser: MessageHandler = async (data) => {
+const getUser: MessageHandler = async (data, requestInfo) => {
   const { user_id } = data;
-  console.log("I am here",data.requestInfo?.user)
+  console.log("I am here", requestInfo);
   const user = await UserSchema.findById(user_id);
 
   if (!user) {
@@ -121,6 +118,13 @@ const getUser: MessageHandler = async (data) => {
 
 // delete user with a specific ID
 const deleteUser: MessageHandler = async (data) => {
+ /* if(!requestInfo.user?.admin){
+    throw new MessageException({
+      code: 403,
+      message: "Forbidden",
+    });
+  }*/
+
   const { user_id } = data;
 
   const user = await UserSchema.findByIdAndDelete(user_id);
@@ -144,20 +148,13 @@ const deleteUser: MessageHandler = async (data) => {
 
 // updates a user given the ID
 const updateUser: MessageHandler = async (data) => {
-  const { user_id, firstName, lastName, SSN, email, postCode } = data;
+  const { user_id, firstName, lastName, SSN, email,password} = data;
   const user = await UserSchema.findByIdAndUpdate(
     user_id,
-    { firstName, lastName, SSN, email, postCode },
+    { firstName, lastName, SSN, email, password},
     { new: true }
   );
   return user;
-};
-
-const verifyToken: MessageHandler = async (data) => {
-  const parsed = JSON.stringify(data);
-  const token = JSON.parse(parsed);
-  const decoded = jwt.verify(token.token, "secret");
-  return decoded;
 };
 
 export default {
@@ -166,5 +163,4 @@ export default {
   getUser,
   deleteUser,
   updateUser,
-  verifyToken,
 };
