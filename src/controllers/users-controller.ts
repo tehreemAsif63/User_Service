@@ -5,21 +5,10 @@ import bcrypt from "bcrypt";
 import { MessageHandler, MessageData } from "../utilities/types-utils";
 
 const createUser: MessageHandler = async (data) => {
-  const { firstName, lastName, SSN, email, password, admin, postCode, theme } =
-    data;
+  const { firstName, lastName, SSN, email, password, theme } = data;
 
   // validate the data of the patient
-  if (
-    !(
-      firstName &&
-      lastName &&
-      SSN &&
-      email &&
-      password &&
-      typeof admin === "boolean" &&
-      postCode
-    )
-  ) {
+  if (!(firstName && lastName && SSN && email && password && theme)) {
     // throw
     throw new MessageException({
       code: 403,
@@ -51,8 +40,7 @@ const createUser: MessageHandler = async (data) => {
     SSN,
     email,
     password: passwordHash,
-    admin,
-    postCode,
+    theme,
   });
 
   user.save();
@@ -97,9 +85,9 @@ const login: MessageHandler = async (data) => {
 };
 
 // return user with a specific ID
-const getUser: MessageHandler = async (data) => {
+const getUser: MessageHandler = async (data, requestInfo) => {
   const { user_id } = data;
-  console.log("I am here",data.requestInfo?.user)
+  console.log("I am here", requestInfo);
   const user = await UserSchema.findById(user_id);
 
   if (!user) {
@@ -119,8 +107,40 @@ const getUser: MessageHandler = async (data) => {
   return user;
 };
 
+// updates a user given the ID
+const updateUser: MessageHandler = async (data) => {
+  const { user_id, firstName, lastName, SSN, email, password } = data;
+
+  const existingUser = await UserSchema.findById(user_id);
+  if (!existingUser) {
+    throw new MessageException({
+      code: 400,
+      message: " User not found",
+    });
+  }
+
+  if (
+    !(firstName && lastName && SSN && email && password)
+  ) {
+    // throw
+    throw new MessageException({
+      code: 403,
+      message: "Input missing data, All data required",
+    });
+  }
+  const passwordHash = await bcrypt.hash(`${password}`, 10);
+  const user = await UserSchema.findByIdAndUpdate(
+    user_id,
+    { firstName, lastName, SSN, email, password:passwordHash },
+    { new: true }
+  );
+  return user;
+};
+
 // delete user with a specific ID
 const deleteUser: MessageHandler = async (data) => {
+  
+
   const { user_id } = data;
 
   const user = await UserSchema.findByIdAndDelete(user_id);
@@ -141,23 +161,25 @@ const deleteUser: MessageHandler = async (data) => {
 
   return "User deleted";
 };
+// delete all users
+const deleteAllUsers: MessageHandler = async (data, requestInfo) => {
+  if (!requestInfo.user?.admin) {
+    throw new MessageException({
+      code: 403,
+      message: "Forbidden",
+    });
+  }
 
-// updates a user given the ID
-const updateUser: MessageHandler = async (data) => {
-  const { user_id, firstName, lastName, SSN, email, postCode } = data;
-  const user = await UserSchema.findByIdAndUpdate(
-    user_id,
-    { firstName, lastName, SSN, email, postCode },
-    { new: true }
-  );
-  return user;
-};
+  await UserSchema.deleteMany(data);
 
-const verifyToken: MessageHandler = async (data) => {
-  const parsed = JSON.stringify(data);
-  const token = JSON.parse(parsed);
-  const decoded = jwt.verify(token.token, "secret");
-  return decoded;
+  if (UserSchema === null) {
+    throw new MessageException({
+      code: 400,
+      message: "DataBase already empty",
+    });
+  }
+
+  return "All Users deleted";
 };
 
 export default {
@@ -166,5 +188,5 @@ export default {
   getUser,
   deleteUser,
   updateUser,
-  verifyToken,
+  deleteAllUsers
 };
