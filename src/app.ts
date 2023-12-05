@@ -7,7 +7,7 @@ import {
   MessagePayload,
 } from "./utilities/types-utils";
 import { MessageException } from "./exceptions/MessageException";
-const mongoURI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/Users";
+const mongoURI = process.env.MONGODB_URI || "mongodb+srv://DIT356:gusdit356@clusterdit356.zpifkti.mongodb.net/DIT356?retryWrites=true&w=majority";
 const client = mqtt.connect(process.env.MQTT_URI || "mqtt://localhost:1883");
 
 const messageMapping: { [key: string]: MessageHandler } = {
