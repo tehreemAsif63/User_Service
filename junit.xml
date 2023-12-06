@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="4" failures="0" errors="0" time="4.057">
+  <testsuite name="login a user" errors="0" failures="0" skipped="0" timestamp="2023-12-06T13:39:39" time="3.44" tests="2">
+    <testcase classname="login a user should return invalid data type when provided a not string type password" name="login a user should return invalid data type when provided a not string type password" time="0.009">
+    </testcase>
+    <testcase classname="login a user should return All input is required when either SSN or email is missing" name="login a user should return All input is required when either SSN or email is missing" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="createUser" errors="0" failures="0" skipped="0" timestamp="2023-12-06T13:39:39" time="3.473" tests="1">
+    <testcase classname="createUser should throw MessageException for missing data" name="createUser should throw MessageException for missing data" time="0.009">
+    </testcase>
+  </testsuite>
+  <testsuite name="createUser" errors="0" failures="0" skipped="0" timestamp="2023-12-06T13:39:39" time="3.522" tests="1">
+    <testcase classname="createUser should hash the password before saving the user" name="createUser should hash the password before saving the user" time="0.012">
+    </testcase>
+  </testsuite>
+</testsuites>
