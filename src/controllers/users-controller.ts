@@ -108,7 +108,7 @@ export const getUser: MessageHandler = async (data, requestInfo) => {
 };
 
 // updates a user given the ID
-const updateUser: MessageHandler = async (data) => {
+export const updateUser: MessageHandler = async (data) => {
   const { user_id, firstName, lastName, SSN, email, password } = data;
   const user = await UserSchema.findByIdAndUpdate(
     user_id,
@@ -119,7 +119,7 @@ const updateUser: MessageHandler = async (data) => {
 };
 
 // delete user with a specific ID
-const deleteUser: MessageHandler = async (data) => {
+export const deleteUser: MessageHandler = async (data) => {
   /* if(!requestInfo.user?.admin){
     throw new MessageException({
       code: 403,
