@@ -10,16 +10,7 @@ const userSchema = new Schema({
     required: [true, "Last name must be entered"],
   },
   SSN: { type: String, required: true, unique: true },
-  postCode: {
-    type: Number,
-    required: true,
-    validate: {
-      validator: function (val: number) {
-        return val.toString().length === 5;
-      },
-      message: (val: { value: number }) => `${val.value} has to be 5 digits`,
-    },
-  },
+  
   email: {
     type: String,
     required: [true, "Email must be set"],
@@ -31,7 +22,7 @@ const userSchema = new Schema({
     ],
   },
   password: { type: String, required: [true, "Password must be set"] },
-  admin: { type: Boolean, default: false },
+ 
   theme: { type: String, enum: ["light", "dark"], default: "light" },
 });
 
