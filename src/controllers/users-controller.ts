@@ -110,22 +110,36 @@ export const getUser: MessageHandler = async (data, requestInfo) => {
 // updates a user given the ID
 export const updateUser: MessageHandler = async (data) => {
   const { user_id, firstName, lastName, SSN, email, password } = data;
+
+  const existingUser = await UserSchema.findById(user_id);
+  if (!existingUser) {
+    throw new MessageException({
+      code: 400,
+      message: " User not found",
+    });
+  }
+
+  if (
+    !(firstName && lastName && SSN && email && password)
+  ) {
+    // throw
+    throw new MessageException({
+      code: 403,
+      message: "Input missing data, All data required",
+    });
+  }
+  const passwordHash = await bcrypt.hash(`${password}`, 10);
   const user = await UserSchema.findByIdAndUpdate(
     user_id,
-    { firstName, lastName, SSN, email, password },
+    { firstName, lastName, SSN, email, password:passwordHash },
     { new: true }
   );
   return user;
 };
 
 // delete user with a specific ID
-export const deleteUser: MessageHandler = async (data) => {
-  /* if(!requestInfo.user?.admin){
-    throw new MessageException({
-      code: 403,
-      message: "Forbidden",
-    });
-  }*/
+const deleteUser: MessageHandler = async (data) => {
+  
 
   const { user_id } = data;
 
