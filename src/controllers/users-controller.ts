@@ -108,7 +108,7 @@ export const getUser: MessageHandler = async (data, requestInfo) => {
 };
 
 // updates a user given the ID
-const updateUser: MessageHandler = async (data) => {
+export const updateUser: MessageHandler = async (data) => {
   const { user_id, firstName, lastName, SSN, email, password } = data;
 
   const existingUser = await UserSchema.findById(user_id);
@@ -119,9 +119,7 @@ const updateUser: MessageHandler = async (data) => {
     });
   }
 
-  if (
-    !(firstName && lastName && SSN && email && password)
-  ) {
+  if (!(firstName && lastName && SSN && email && password)) {
     // throw
     throw new MessageException({
       code: 403,
@@ -131,15 +129,20 @@ const updateUser: MessageHandler = async (data) => {
   const passwordHash = await bcrypt.hash(`${password}`, 10);
   const user = await UserSchema.findByIdAndUpdate(
     user_id,
-    { firstName, lastName, SSN, email, password:passwordHash },
+    { firstName, lastName, SSN, email, password: passwordHash },
     { new: true }
   );
   return user;
 };
 
 // delete user with a specific ID
-const deleteUser: MessageHandler = async (data) => {
-  
+export const deleteUser: MessageHandler = async (data) => {
+  /* if(!requestInfo.user?.admin){
+    throw new MessageException({
+      code: 403,
+      message: "Forbidden",
+    });
+  }*/
 
   const { user_id } = data;
 
