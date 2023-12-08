@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { MessageHandler, MessageData } from "../utilities/types-utils";
 
-const createUser: MessageHandler = async (data) => {
+export const createUser: MessageHandler = async (data) => {
   const { firstName, lastName, SSN, email, password, theme } = data;
 
   // validate the data of the patient
@@ -17,7 +17,7 @@ const createUser: MessageHandler = async (data) => {
   }
 
   // find a registered Users in DB
-  const registeredUser = UserSchema.find({ SSN, email });
+  const registeredUser = await UserSchema.find({ SSN, email });
 
   // check if user already registered in DB
   if ((await registeredUser).length > 0) {
@@ -43,13 +43,13 @@ const createUser: MessageHandler = async (data) => {
     theme,
   });
 
-  user.save();
+  await user.save();
 
   return user;
 };
 
 // user login
-const login: MessageHandler = async (data) => {
+export const login: MessageHandler = async (data) => {
   const { SSN, email, password } = data;
   // Validate user input
   if (typeof password != "string") {
@@ -85,7 +85,7 @@ const login: MessageHandler = async (data) => {
 };
 
 // return user with a specific ID
-const getUser: MessageHandler = async (data, requestInfo) => {
+export const getUser: MessageHandler = async (data, requestInfo) => {
   const { user_id } = data;
   console.log("I am here", requestInfo);
   const user = await UserSchema.findById(user_id);
@@ -108,7 +108,7 @@ const getUser: MessageHandler = async (data, requestInfo) => {
 };
 
 // updates a user given the ID
-const updateUser: MessageHandler = async (data) => {
+export const updateUser: MessageHandler = async (data) => {
   const { user_id, firstName, lastName, SSN, email, password } = data;
 
   const existingUser = await UserSchema.findById(user_id);
@@ -119,9 +119,7 @@ const updateUser: MessageHandler = async (data) => {
     });
   }
 
-  if (
-    !(firstName && lastName && SSN && email && password)
-  ) {
+  if (!(firstName && lastName && SSN && email && password)) {
     // throw
     throw new MessageException({
       code: 403,
@@ -131,16 +129,14 @@ const updateUser: MessageHandler = async (data) => {
   const passwordHash = await bcrypt.hash(`${password}`, 10);
   const user = await UserSchema.findByIdAndUpdate(
     user_id,
-    { firstName, lastName, SSN, email, password:passwordHash },
+    { firstName, lastName, SSN, email, password: passwordHash },
     { new: true }
   );
   return user;
 };
 
 // delete user with a specific ID
-const deleteUser: MessageHandler = async (data) => {
-  
-
+export const deleteUser: MessageHandler = async (data) => {
   const { user_id } = data;
 
   const user = await UserSchema.findByIdAndDelete(user_id);
@@ -188,5 +184,5 @@ export default {
   getUser,
   deleteUser,
   updateUser,
-  deleteAllUsers
+  deleteAllUsers,
 };
