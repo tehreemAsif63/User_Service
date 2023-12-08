@@ -119,9 +119,7 @@ export const updateUser: MessageHandler = async (data) => {
     });
   }
 
-  if (
-    !(firstName && lastName && SSN && email && password)
-  ) {
+  if (!(firstName && lastName && SSN && email && password)) {
     // throw
     throw new MessageException({
       code: 403,
@@ -131,16 +129,14 @@ export const updateUser: MessageHandler = async (data) => {
   const passwordHash = await bcrypt.hash(`${password}`, 10);
   const user = await UserSchema.findByIdAndUpdate(
     user_id,
-    { firstName, lastName, SSN, email, password:passwordHash },
+    { firstName, lastName, SSN, email, password: passwordHash },
     { new: true }
   );
   return user;
 };
 
 // delete user with a specific ID
-const deleteUser: MessageHandler = async (data) => {
-  
-
+export const deleteUser: MessageHandler = async (data) => {
   const { user_id } = data;
 
   const user = await UserSchema.findByIdAndDelete(user_id);
