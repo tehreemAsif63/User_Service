@@ -1,61 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="9" failures="1" errors="0" time="6.918">
-  <testsuite name="createUser" errors="0" failures="0" skipped="0" timestamp="2023-12-06T14:51:59" time="5.327" tests="1">
-    <testcase classname="createUser should throw MessageException for missing data" name="createUser should throw MessageException for missing data" time="0.016">
+<testsuites name="jest tests" tests="7" failures="0" errors="0" time="6.953">
+  <testsuite name="createUser" errors="0" failures="0" skipped="0" timestamp="2023-12-08T15:22:22" time="5.335" tests="1">
+    <testcase classname="createUser should throw MessageException for missing data" name="createUser should throw MessageException for missing data" time="0.013">
     </testcase>
   </testsuite>
-  <testsuite name="login a user" errors="0" failures="0" skipped="0" timestamp="2023-12-06T14:51:59" time="5.321" tests="2">
-    <testcase classname="login a user should return invalid data type when provided a not string type password" name="login a user should return invalid data type when provided a not string type password" time="0.013">
+  <testsuite name="login a user" errors="0" failures="0" skipped="0" timestamp="2023-12-08T15:22:22" time="5.303" tests="2">
+    <testcase classname="login a user should return invalid data type when provided a not string type password" name="login a user should return invalid data type when provided a not string type password" time="0.012">
     </testcase>
-    <testcase classname="login a user should return All input is required when either SSN or email is missing" name="login a user should return All input is required when either SSN or email is missing" time="0.001">
-    </testcase>
-  </testsuite>
-  <testsuite name="getUser function" errors="0" failures="0" skipped="0" timestamp="2023-12-06T14:51:59" time="5.373" tests="2">
-    <testcase classname="getUser function should return user if found" name="getUser function should return user if found" time="0.031">
-    </testcase>
-    <testcase classname="getUser function should return Invalid user ID when wrong userID" name="getUser function should return Invalid user ID when wrong userID" time="0.013">
+    <testcase classname="login a user should return All input is required when either SSN or email is missing" name="login a user should return All input is required when either SSN or email is missing" time="0">
     </testcase>
   </testsuite>
-  <testsuite name="updateUser function" errors="0" failures="0" skipped="0" timestamp="2023-12-06T14:51:59" time="5.476" tests="1">
-    <testcase classname="updateUser function should update user and return the updated user" name="updateUser function should update user and return the updated user" time="0.014">
+  <testsuite name="deleteUser function" errors="0" failures="0" skipped="0" timestamp="2023-12-08T15:22:22" time="6.22" tests="1">
+    <testcase classname="deleteUser function should return Invalid id when wrong userID" name="deleteUser function should return Invalid id when wrong userID" time="0.016">
     </testcase>
   </testsuite>
-  <testsuite name="createUser" errors="0" failures="0" skipped="0" timestamp="2023-12-06T14:51:59" time="5.501" tests="1">
+  <testsuite name="getUser function" errors="0" failures="0" skipped="0" timestamp="2023-12-08T15:22:22" time="6.283" tests="2">
+    <testcase classname="getUser function should return user if found" name="getUser function should return user if found" time="0.021">
+    </testcase>
+    <testcase classname="getUser function should return Invalid user ID when wrong userID" name="getUser function should return Invalid user ID when wrong userID" time="0.007">
+    </testcase>
+  </testsuite>
+  <testsuite name="createUser" errors="0" failures="0" skipped="0" timestamp="2023-12-08T15:22:22" time="6.321" tests="1">
     <testcase classname="createUser should hash the password before saving the user" name="createUser should hash the password before saving the user" time="0.013">
-    </testcase>
-  </testsuite>
-  <testsuite name="deleteUser function" errors="0" failures="1" skipped="0" timestamp="2023-12-06T14:51:59" time="6.255" tests="2">
-    <testcase classname="deleteUser function should return Invalid id when wrong userID" name="deleteUser function should return Invalid id when wrong userID" time="0.013">
-    </testcase>
-    <testcase classname="deleteUser function should return User does not exist when wrong userID" name="deleteUser function should return User does not exist when wrong userID" time="0.012">
-      <failure>Error: expect(received).rejects.toThrow(expected)
-
-Expected message: &quot;User does not exist&quot;
-Received message: &quot;Invalid id&quot;
-
-      at C:\Users\david\OneDrive\바탕 화면\Gothenburg University\Mini Project (Distributed Systems)../../../../../../../auth_service/src/controllers/users-controller.ts:135:11
-      at fulfilled (C:\Users\david\OneDrive\바탕 화면\Gothenburg University\Mini Project (Distributed Systems)../../../../../../../auth_service/src/controllers/users-controller.ts:5:58)
-    at Object.toThrow (C:\Users\david\OneDrive\바탕 화면\Gothenburg University\Mini Project (Distributed Systems)\auth_service\node_modules\expect\build\index.js:218:22)
-    at C:\Users\david\OneDrive\바탕 화면\Gothenburg University\Mini Project (Distributed Systems)\auth_service\src\tests\deleteUser.test.ts:34:15
-    at Generator.next (&lt;anonymous&gt;)
-    at C:\Users\david\OneDrive\바탕 화면\Gothenburg University\Mini Project (Distributed Systems)\auth_service\src\tests\deleteUser.test.ts:8:71
-    at new Promise (&lt;anonymous&gt;)
-    at Object.&lt;anonymous&gt;.__awaiter (C:\Users\david\OneDrive\바탕 화면\Gothenburg University\Mini Project (Distributed Systems)\auth_service\src\tests\deleteUser.test.ts:4:12)
-    at Object.&lt;anonymous&gt; (C:\Users\david\OneDrive\바탕 화면\Gothenburg University\Mini Project (Distributed Systems)\auth_service\src\tests\deleteUser.test.ts:26:72)
-    at Promise.then.completed (C:\Users\david\OneDrive\바탕 화면\Gothenburg University\Mini Project (Distributed Systems)\auth_service\node_modules\jest-circus\build\utils.js:298:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (C:\Users\david\OneDrive\바탕 화면\Gothenburg University\Mini Project (Distributed Systems)\auth_service\node_modules\jest-circus\build\utils.js:231:10)
-    at _callCircusTest (C:\Users\david\OneDrive\바탕 화면\Gothenburg University\Mini Project (Distributed Systems)\auth_service\node_modules\jest-circus\build\run.js:316:40)
-    at processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at _runTest (C:\Users\david\OneDrive\바탕 화면\Gothenburg University\Mini Project (Distributed Systems)\auth_service\node_modules\jest-circus\build\run.js:252:3)
-    at _runTestsForDescribeBlock (C:\Users\david\OneDrive\바탕 화면\Gothenburg University\Mini Project (Distributed Systems)\auth_service\node_modules\jest-circus\build\run.js:126:9)
-    at _runTestsForDescribeBlock (C:\Users\david\OneDrive\바탕 화면\Gothenburg University\Mini Project (Distributed Systems)\auth_service\node_modules\jest-circus\build\run.js:121:9)
-    at run (C:\Users\david\OneDrive\바탕 화면\Gothenburg University\Mini Project (Distributed Systems)\auth_service\node_modules\jest-circus\build\run.js:71:3)
-    at runAndTransformResultsToJestFormat (C:\Users\david\OneDrive\바탕 화면\Gothenburg University\Mini Project (Distributed Systems)\auth_service\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
-    at jestAdapter (C:\Users\david\OneDrive\바탕 화면\Gothenburg University\Mini Project (Distributed Systems)\auth_service\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
-    at runTestInternal (C:\Users\david\OneDrive\바탕 화면\Gothenburg University\Mini Project (Distributed Systems)\auth_service\node_modules\jest-runner\build\runTest.js:367:16)
-    at runTest (C:\Users\david\OneDrive\바탕 화면\Gothenburg University\Mini Project (Distributed Systems)\auth_service\node_modules\jest-runner\build\runTest.js:444:34)
-    at Object.worker (C:\Users\david\OneDrive\바탕 화면\Gothenburg University\Mini Project (Distributed Systems)\auth_service\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
     </testcase>
   </testsuite>
 </testsuites>
