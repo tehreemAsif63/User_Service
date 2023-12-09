@@ -66,7 +66,7 @@ const login: MessageHandler = async (data) => {
   }
 
   // Check if user exist in our DB
-  const user = await UserSchema.findOne({ SSN, email });
+  const user = await UserSchema.findOne({ $or: [{ SSN }, { email }] });
   if (!user) {
     throw new MessageException({
       code: 404,
@@ -109,7 +109,7 @@ const getUser: MessageHandler = async (data, requestInfo) => {
 
 // updates a user given the ID
 const updateUser: MessageHandler = async (data) => {
-  const { user_id, firstName, lastName, SSN, email, password } = data;
+  const { user_id, firstName, lastName, email, password } = data;
 
   const existingUser = await UserSchema.findById(user_id);
   if (!existingUser) {
@@ -119,9 +119,7 @@ const updateUser: MessageHandler = async (data) => {
     });
   }
 
-  if (
-    !(firstName && lastName && SSN && email && password)
-  ) {
+  if (!(firstName && lastName && email && password)) {
     // throw
     throw new MessageException({
       code: 403,
@@ -131,7 +129,7 @@ const updateUser: MessageHandler = async (data) => {
   const passwordHash = await bcrypt.hash(`${password}`, 10);
   const user = await UserSchema.findByIdAndUpdate(
     user_id,
-    { firstName, lastName, SSN, email, password:passwordHash },
+    { firstName, lastName, email, password: passwordHash },
     { new: true }
   );
   return user;
@@ -139,8 +137,6 @@ const updateUser: MessageHandler = async (data) => {
 
 // delete user with a specific ID
 const deleteUser: MessageHandler = async (data) => {
-  
-
   const { user_id } = data;
 
   const user = await UserSchema.findByIdAndDelete(user_id);
@@ -188,5 +184,5 @@ export default {
   getUser,
   deleteUser,
   updateUser,
-  deleteAllUsers
+  deleteAllUsers,
 };

@@ -22,7 +22,6 @@ const userSchema = new Schema({
     ],
   },
   password: { type: String, required: [true, "Password must be set"] },
- 
   theme: { type: String, enum: ["light", "dark"], default: "light" },
 });
 
