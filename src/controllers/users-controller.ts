@@ -66,7 +66,7 @@ export const login: MessageHandler = async (data) => {
   }
 
   // Check if user exist in our DB
-  const user = await UserSchema.findOne({ SSN, email });
+  const user = await UserSchema.findOne({ $or: [{ SSN }, { email }] });
   if (!user) {
     throw new MessageException({
       code: 404,
@@ -86,9 +86,9 @@ export const login: MessageHandler = async (data) => {
 
 // return user with a specific ID
 export const getUser: MessageHandler = async (data, requestInfo) => {
-  const { user_id } = data;
+  const { email } = data;
   console.log("I am here", requestInfo);
-  const user = await UserSchema.findById(user_id);
+  const user = await UserSchema.findById(email);
 
   if (!user) {
     throw new MessageException({
@@ -104,12 +104,12 @@ export const getUser: MessageHandler = async (data, requestInfo) => {
     });
   }
 
-  return user;
+  return user._id;
 };
 
 // updates a user given the ID
-export const updateUser: MessageHandler = async (data) => {
-  const { user_id, firstName, lastName, SSN, email, password } = data;
+const updateUser: MessageHandler = async (data) => {
+  const { user_id, firstName, lastName, email, password } = data;
 
   const existingUser = await UserSchema.findById(user_id);
   if (!existingUser) {
@@ -119,7 +119,7 @@ export const updateUser: MessageHandler = async (data) => {
     });
   }
 
-  if (!(firstName && lastName && SSN && email && password)) {
+  if (!(firstName && lastName && email && password)) {
     // throw
     throw new MessageException({
       code: 403,
@@ -129,7 +129,7 @@ export const updateUser: MessageHandler = async (data) => {
   const passwordHash = await bcrypt.hash(`${password}`, 10);
   const user = await UserSchema.findByIdAndUpdate(
     user_id,
-    { firstName, lastName, SSN, email, password: passwordHash },
+    { firstName, lastName, email, password: passwordHash },
     { new: true }
   );
   return user;
