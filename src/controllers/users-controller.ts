@@ -86,9 +86,9 @@ const login: MessageHandler = async (data) => {
 
 // return user with a specific ID
 const getUser: MessageHandler = async (data, requestInfo) => {
-  const { user_id } = data;
+  const { email } = data;
   console.log("I am here", requestInfo);
-  const user = await UserSchema.findById(user_id);
+  const user = await UserSchema.findById(email);
 
   if (!user) {
     throw new MessageException({
@@ -104,7 +104,7 @@ const getUser: MessageHandler = async (data, requestInfo) => {
     });
   }
 
-  return user;
+  return user._id;
 };
 
 // updates a user given the ID
