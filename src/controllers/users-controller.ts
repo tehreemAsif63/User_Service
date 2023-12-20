@@ -85,7 +85,7 @@ export const login: MessageHandler = async (data) => {
 };
 
 // return user with a specific ID
-const getUser: MessageHandler = async (data, requestInfo) => {
+export const getUser: MessageHandler = async (data, requestInfo) => {
   const { email } = data;
   console.log("I am here", requestInfo);
   const user = await UserSchema.findById(email);
@@ -136,7 +136,7 @@ const updateUser: MessageHandler = async (data) => {
 };
 
 // delete user with a specific ID
-const deleteUser: MessageHandler = async (data) => {
+export const deleteUser: MessageHandler = async (data) => {
   const { user_id } = data;
 
   const user = await UserSchema.findByIdAndDelete(user_id);
