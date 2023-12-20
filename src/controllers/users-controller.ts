@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { MessageHandler, MessageData } from "../utilities/types-utils";
 
-const createUser: MessageHandler = async (data) => {
+export const createUser: MessageHandler = async (data) => {
   const { firstName, lastName, SSN, email, password, theme } = data;
 
   // validate the data of the patient
@@ -17,7 +17,7 @@ const createUser: MessageHandler = async (data) => {
   }
 
   // find a registered Users in DB
-  const registeredUser = UserSchema.find({ SSN, email });
+  const registeredUser = await UserSchema.find({ SSN, email });
 
   // check if user already registered in DB
   if ((await registeredUser).length > 0) {
@@ -43,13 +43,13 @@ const createUser: MessageHandler = async (data) => {
     theme,
   });
 
-  user.save();
+  await user.save();
 
   return user;
 };
 
 // user login
-const login: MessageHandler = async (data) => {
+export const login: MessageHandler = async (data) => {
   const { SSN, email, password } = data;
   // Validate user input
   if (typeof password != "string") {
