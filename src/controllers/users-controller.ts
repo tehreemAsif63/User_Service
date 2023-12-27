@@ -106,21 +106,7 @@ const getAllUsers: MessageHandler = async (data, requestInfo) => {
 
 
 
-const getUserByEmail: MessageHandler = async (data, requestInfo) => {
-  let query: FilterQuery<User> = {};
-  query = { email: data.email };
-  
-  const users = await UserSchema.find(query);
- 
-   if (users=== null) {
-     throw new MessageException({
-       code: 400,
-       message: "DataBase is empty",
-     });
-   }
- 
-   return users;
-};
+
 
 // return user with a specific ID
 const getUser: MessageHandler = async (data, requestInfo) => {
