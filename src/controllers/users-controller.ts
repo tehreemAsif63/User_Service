@@ -12,7 +12,7 @@ export const createUser: MessageHandler = async (data) => {
     // throw
     throw new MessageException({
       code: 403,
-      message: "Input missing data, All data required",
+      message: "Input missing data, All data required", // testable
     });
   }
 
@@ -23,7 +23,7 @@ export const createUser: MessageHandler = async (data) => {
   if ((await registeredUser).length > 0) {
     throw new MessageException({
       code: 403,
-      message: "User already exists",
+      message: "User already exists", // testable
     });
   }
 
@@ -55,13 +55,13 @@ export const login: MessageHandler = async (data) => {
   if (typeof password != "string") {
     throw new MessageException({
       code: 400,
-      message: "Invalid Data type",
+      message: "Invalid Data type", // testable
     });
   }
   if (!((SSN || email) && password)) {
     throw new MessageException({
       code: 400,
-      message: "All input is required",
+      message: "All input is required", // testable
     });
   }
 
@@ -70,7 +70,7 @@ export const login: MessageHandler = async (data) => {
   if (!user) {
     throw new MessageException({
       code: 404,
-      message: "Invalid records",
+      message: "Invalid records", // testable
     });
   }
 
@@ -93,7 +93,7 @@ export const getUser: MessageHandler = async (data, requestInfo) => {
   if (!user) {
     throw new MessageException({
       code: 400,
-      message: "Invalid user ID",
+      message: "Invalid user ID", // testable
     });
   }
 
@@ -108,14 +108,14 @@ export const getUser: MessageHandler = async (data, requestInfo) => {
 };
 
 // updates a user given the ID
-const updateUser: MessageHandler = async (data) => {
+export const updateUser: MessageHandler = async (data) => {
   const { user_id, firstName, lastName, email, password } = data;
 
   const existingUser = await UserSchema.findById(user_id);
   if (!existingUser) {
     throw new MessageException({
       code: 400,
-      message: " User not found",
+      message: "User not found", // testable
     });
   }
 
@@ -123,7 +123,7 @@ const updateUser: MessageHandler = async (data) => {
     // throw
     throw new MessageException({
       code: 403,
-      message: "Input missing data, All data required",
+      message: "Input missing data, All data required", // testable
     });
   }
   const passwordHash = await bcrypt.hash(`${password}`, 10);
@@ -144,7 +144,7 @@ export const deleteUser: MessageHandler = async (data) => {
   if (!user) {
     throw new MessageException({
       code: 400,
-      message: "Invalid id",
+      message: "Invalid id", // testable
     });
   }
 
@@ -158,7 +158,7 @@ export const deleteUser: MessageHandler = async (data) => {
   return "User deleted";
 };
 // delete all users
-const deleteAllUsers: MessageHandler = async (data, requestInfo) => {
+export const deleteAllUsers: MessageHandler = async (data, requestInfo) => {
   if (!requestInfo.user?.admin) {
     throw new MessageException({
       code: 403,
@@ -175,7 +175,7 @@ const deleteAllUsers: MessageHandler = async (data, requestInfo) => {
     });
   }
 
-  return "All Users deleted";
+  return "All users deleted";
 };
 
 export default {
