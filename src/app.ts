@@ -14,6 +14,7 @@ const messageMapping: { [key: string]: MessageHandler } = {
   "users/create": userController.createUser,
   "users/login": userController.login,
   "users/me/:user_id": userController.getUser,
+  "users": userController.getAllUsers,
   "users/update/:user_id": userController.updateUser,
   "users/delete/:user_id": userController.deleteUser,
   "users/delete": userController.deleteAllUsers,
@@ -24,7 +25,7 @@ client.on("connect", () => {
 });
 
 client.on("message", async (topic, message) => {
-  console.log(message.toString());
+  
   const handler = messageMapping[topic];
   if (handler) {
     const { payload, responseTopic, requestInfo } = JSON.parse(

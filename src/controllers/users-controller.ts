@@ -3,8 +3,9 @@ import { MessageException } from "../exceptions/MessageException";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { MessageHandler, MessageData } from "../utilities/types-utils";
+import { FilterQuery } from "mongoose";
 
-export const createUser: MessageHandler = async (data) => {
+const createUser: MessageHandler = async (data) => {
   const { firstName, lastName, SSN, email, password, theme } = data;
 
   // validate the data of the patient
@@ -17,7 +18,7 @@ export const createUser: MessageHandler = async (data) => {
   }
 
   // find a registered Users in DB
-  const registeredUser = await UserSchema.find({ SSN, email });
+  const registeredUser = UserSchema.find({ SSN, email });
 
   // check if user already registered in DB
   if ((await registeredUser).length > 0) {
@@ -43,13 +44,13 @@ export const createUser: MessageHandler = async (data) => {
     theme,
   });
 
-  await user.save();
+  user.save();
 
   return user;
 };
 
 // user login
-export const login: MessageHandler = async (data) => {
+const login: MessageHandler = async (data) => {
   const { SSN, email, password } = data;
   // Validate user input
   if (typeof password != "string") {
@@ -84,11 +85,34 @@ export const login: MessageHandler = async (data) => {
   return user;
 };
 
+
+const getAllUsers: MessageHandler = async (data, requestInfo) => {
+  let query: FilterQuery<User> = {};
+ if(data.email){
+  query = {email:data.email };
+ }
+  const users = await UserSchema.find(query);
+  
+ 
+   if (users=== null) {
+     throw new MessageException({
+       code: 400,
+       message: "DataBase is empty",
+     });
+   }
+ 
+   return users;
+ };
+
+
+
+
+
 // return user with a specific ID
-export const getUser: MessageHandler = async (data, requestInfo) => {
-  const { email } = data;
-  console.log("I am here", requestInfo);
-  const user = await UserSchema.findById(email);
+const getUser: MessageHandler = async (data, requestInfo) => {
+  const { user_id } = data;
+
+  const user = await UserSchema.findById(user_id);
 
   if (!user) {
     throw new MessageException({
@@ -104,7 +128,7 @@ export const getUser: MessageHandler = async (data, requestInfo) => {
     });
   }
 
-  return user._id;
+  return user;
 };
 
 // updates a user given the ID
@@ -136,7 +160,7 @@ export const updateUser: MessageHandler = async (data) => {
 };
 
 // delete user with a specific ID
-export const deleteUser: MessageHandler = async (data) => {
+const deleteUser: MessageHandler = async (data) => {
   const { user_id } = data;
 
   const user = await UserSchema.findByIdAndDelete(user_id);
@@ -182,6 +206,7 @@ export default {
   createUser,
   login,
   getUser,
+  getAllUsers,
   deleteUser,
   updateUser,
   deleteAllUsers,
