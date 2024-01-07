@@ -1,9 +1,11 @@
 import { createUser } from "../controllers/users-controller";
 import { MessageException } from "../exceptions/MessageException";
+import UserSchema from "../schemas/users";
+
+jest.mock("../schemas/users");
 
 describe("createUser", () => {
   it("should throw MessageException for missing data", async () => {
-    // Test data for case where password(essential data) is missing.
     const invalidData = {
       firstName: "John",
       lastName: "Doe",
@@ -12,27 +14,40 @@ describe("createUser", () => {
       theme: "dark",
     };
 
-    const validPayload = {
-      responseTopic: "users/create",
-      payload: invalidData,
-      requestInfo: {},
-    };
-
-    expect.assertions(2);
+    const requestInfo = {};
 
     try {
-      const result = await createUser(
-        validPayload.payload,
-        validPayload.requestInfo
-      );
+      const result = await createUser(invalidData, requestInfo);
       expect(result).toBeDefined();
     } catch (error) {
-      // Assert that the error is an instance of MessageException with the correct message
       const messageExceptionError = error as MessageException;
       expect(messageExceptionError).toBeInstanceOf(MessageException);
       expect(messageExceptionError.message).toBe(
         "Input missing data, All data required"
       );
     }
+  });
+
+  it("should return user already exists", async () => {
+    const validData = {
+      firstName: "test",
+      lastName: "user",
+      SSN: "000000000",
+      email: "test@user.com",
+      password: "test",
+      theme: "light",
+    };
+    const requestInfo = {};
+
+    const findMock = jest.spyOn(UserSchema, "find");
+    findMock.mockResolvedValue([validData]);
+
+    await expect(createUser(validData, requestInfo)).rejects.toThrow(
+      new MessageException({
+        code: 403,
+        message: "User already exists",
+      })
+    );
+    findMock.mockRestore();
   });
 });
