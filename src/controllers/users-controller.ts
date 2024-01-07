@@ -85,28 +85,22 @@ const login: MessageHandler = async (data) => {
   return user;
 };
 
-
 const getAllUsers: MessageHandler = async (data, requestInfo) => {
   let query: FilterQuery<User> = {};
- if(data.email){
-  query = {email:data.email };
- }
+  if (data.email) {
+    query = { email: data.email };
+  }
   const users = await UserSchema.find(query);
-  
  
-   if (users=== null) {
-     throw new MessageException({
-       code: 400,
-       message: "DataBase is empty",
-     });
-   }
- 
-   return users;
- };
+  if (users === null) {
+    throw new MessageException({
+      code: 400,
+      message: "DataBase is empty",
+    });
+  }
 
-
-
-
+  return users;
+};
 
 // return user with a specific ID
 const getUser: MessageHandler = async (data, requestInfo) => {
