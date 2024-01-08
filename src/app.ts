@@ -7,13 +7,14 @@ import {
   MessagePayload,
 } from "./utilities/types-utils";
 import { MessageException } from "./exceptions/MessageException";
-const mongoURI = process.env.MONGODB_URI || "mongodb+srv://DIT356:gusdit356@clusterdit356.zpifkti.mongodb.net/Patients?retryWrites=true&w=majority";
+const mongoURI = process.env.MONGODB_URI ||  "mongodb+srv://DIT356:gusdit356@clusterdit356.zpifkti.mongodb.net/Patients?retryWrites=true&w=majority";
 const client = mqtt.connect(process.env.MQTT_URI || "mqtt://localhost:1883");
 
 const messageMapping: { [key: string]: MessageHandler } = {
   "users/create": userController.createUser,
   "users/login": userController.login,
-  "users/me/:user_id": userController.getUser,
+  "users/me/getOne": userController.getUser,
+  "users": userController.getAllUsers,
   "users/update/:user_id": userController.updateUser,
   "users/delete/:user_id": userController.deleteUser,
   "users/delete": userController.deleteAllUsers,
@@ -24,7 +25,7 @@ client.on("connect", () => {
 });
 
 client.on("message", async (topic, message) => {
-  console.log(message.toString());
+  
   const handler = messageMapping[topic];
   if (handler) {
     const { payload, responseTopic, requestInfo } = JSON.parse(
