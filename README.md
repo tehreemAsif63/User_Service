@@ -1,6 +1,4 @@
-# User_Service
-
-## Getting started
+# User Service
 
 Our service is intended for the use of general public to book appointments with the dentists. <br>
 Therefore, we can say that general public is one of the critical stakeholders regarding this project. <br>
@@ -10,17 +8,14 @@ This service has been created with the intention for the general public to not o
 
 Instead of the traditional CRUD methods from the HTTP, we have decided to use MQTT to communicate between the systems. <br>
 
-TODO:
+- MQTT is chosen for its low bandwidth usage, real-time communication, and asynchronous messaging, making it well-suited for efficient and timely updates in distributed systems like dentist appointment management.
+- MQTT offers low bandwidth usage, real-time communication, asynchronous messaging, reliability, persistent connections, scalability, and a small code , making it ideal for distributed systems handling appointments with several independent components which required communication.
+- MQTT may pose security concerns if not configured properly, lacks inherent statefulness, is not designed for strict request-response interactions, and might require a learning curve for development teams unfamiliar with the publish/subscribe paradigm.
 
-- Explain about why we have decided to use MQTT instead of HTTP.
-- Explain the advantages of using HTTP.
-- Explain the potential limitations.
 
 ## The controllers
 
-Creating accounts, modifying them, logging in, updating accounts, ... ... ... <br>
-These functionallities all need to have controllers that manages them. <br>
-Therefore, we have created the controllers for the users with several methods(endpoints). <br>
+Various functionalities such as creating accounts, modifying them, logging in, and updating accounts require controllers to manage them. Therefore, we've implemented controllers for dentists with several methods (endpoints).<br>
 
 ### CreateUser Method
 
@@ -52,17 +47,6 @@ TODO:
 
 - Explain the updateUser method.
 
-### DeleteAllUser Method
-
-TODO:
-
-- Explain the deleteAllUser method.
-
-## Routes
-
-TODO:
-
-- Explain the routes written in the app.ts file.
 
 ## Test
 
@@ -137,3 +121,7 @@ Ahmed Ebrahim Ahmed Al Gabri(WRITE YOUR EMAIL) has created all of the methods fo
 #### Jest Tests & CI Pipeline
 
 David Boram Hong(guscholcda@student.gu.se) has created all of the tests and CI pipeline.
+
+#### DentistDocumentation
+
+David Boram Hong(guscholcda@student.gu.se) and Tehreem ASif (gusasite@student.gu.se) has taken care of all the documentation for this service.
