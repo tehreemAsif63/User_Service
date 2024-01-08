@@ -1,16 +1,10 @@
 # User Service
 
-Our service is intended for the use of general public to book appointments with the dentists. <br>
-Therefore, we can say that general public is one of the critical stakeholders regarding this project. <br>
-This service has been created with the intention for the general public to not only create their accounts but also to save their preferrences whene using the service. <br>
+Our service is dedicated to the general public for booking appointments with dentists, making them critical stakeholders in our project. This service allows the general public not only to create accounts but also to save preferences when using the service.
 
 ## Technology used
 
-Instead of the traditional CRUD methods from the HTTP, we have decided to use MQTT to communicate between the systems. <br>
-
-- MQTT is chosen for its low bandwidth usage, real-time communication, and asynchronous messaging, making it well-suited for efficient and timely updates in distributed systems like dentist appointment management.
-- MQTT offers low bandwidth usage, real-time communication, asynchronous messaging, reliability, persistent connections, scalability, and a small code , making it ideal for distributed systems handling appointments with several independent components which required communication.
-- MQTT may pose security concerns if not configured properly, lacks inherent statefulness, is not designed for strict request-response interactions, and might require a learning curve for development teams unfamiliar with the publish/subscribe paradigm.
+We leverage MQTT for communication between systems, opting for its advantages such as low bandwidth usage, real-time communication, and asynchronous messaging. However, it's essential to consider potential security concerns, the lack of inherent statefulness, and a learning curve for teams unfamiliar with the publish/subscribe paradigm.
 
 
 ## The controllers
@@ -19,33 +13,29 @@ Various functionalities such as creating accounts, modifying them, logging in, a
 
 ### CreateUser Method
 
-TODO:
+- Responsible for creating user accounts.
+- Validates input data and throws an exception if mandatory information is missing.
 
-- Explain the createUser method.
 
 ### Login Method
 
-TODO:
-
-- Explain the login method.
+- Handles user login functionality.
+- Throws an exception for invalid data types or missing credentials.
 
 ### GetUser Method
 
-TODO:
-
-- Explain the getUser method.
+- Retrieves user information from the database based on the provided user ID.
+- Throws an exception for an invalid user ID.
 
 ### DeleteUser Method
 
-TODO:
-
-- Explain the deleteUser method.
+- Deletes a user account from the database based on the provided user ID.
+- Throws an exception for an invalid user ID.
 
 ### UpdateUser Method
 
-TODO:
-
-- Explain the updateUser method.
+- Updates user information in the database.
+- Validates input data and throws an exception if mandatory information is missing.
 
 
 ## Test
@@ -124,4 +114,4 @@ David Boram Hong(guscholcda@student.gu.se) has created all of the tests and CI p
 
 #### DentistDocumentation
 
-David Boram Hong(guscholcda@student.gu.se) and Tehreem ASif (gusasite@student.gu.se) has taken care of all the documentation for this service.
+David Boram Hong(guscholcda@student.gu.se) and Tehreem Asif (gusasite@student.gu.se) has taken care of all the documentation for this service.
