@@ -1,92 +1,117 @@
-# User_Service
+# User Service
+
+Our service is dedicated to the general public for booking appointments with dentists, making them critical stakeholders in our project. This service allows the general public not only to create accounts but also to save preferences when using the service.
+
+## Technology used
+
+We leverage MQTT for communication between systems, opting for its advantages such as low bandwidth usage, real-time communication, and asynchronous messaging. However, it's essential to consider potential security concerns, the lack of inherent statefulness, and a learning curve for teams unfamiliar with the publish/subscribe paradigm.
 
 
+## The controllers
 
-## Getting started
+Various functionalities such as creating accounts, modifying them, logging in, and updating accounts require controllers to manage them. Therefore, we've implemented controllers for dentists with several methods (endpoints).<br>
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+### CreateUser Method
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+- Responsible for creating user accounts.
+- Validates input data and throws an exception if mandatory information is missing.
 
-## Add your files
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+### Login Method
 
-```
-cd existing_repo
-git remote add origin https://git.chalmers.se/courses/dit355/2023/student-teams/dit356-2023-03/auth_service.git
-git branch -M main
-git push -uf origin main
-```
+- Handles user login functionality.
+- Throws an exception for invalid data types or missing credentials.
 
-## Integrate with your tools
+### GetUser Method
 
-- [ ] [Set up project integrations](https://git.chalmers.se/courses/dit355/2023/student-teams/dit356-2023-03/auth_service/-/settings/integrations)
+- Retrieves user information from the database based on the provided user ID.
+- Throws an exception for an invalid user ID.
 
-## Collaborate with your team
+### DeleteUser Method
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+- Deletes a user account from the database based on the provided user ID.
+- Throws an exception for an invalid user ID.
 
-## Test and Deploy
+### UpdateUser Method
 
-Use the built-in continuous integration in GitLab.
+- Updates user information in the database.
+- Validates input data and throws an exception if mandatory information is missing.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
 
-***
+## Test
 
-# Editing this README
+Through the gitlab ci/cd pipeline system, our project is automatically tested whenever a new commit is pushed to the remote repository. <br>
+Our group has decided to use jest as the features for the unit testing. <br>
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+### CI pipeline
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+Our pipeline uses node version 18 as the image because that's what our project is using. <br>
+It is consisted of two stages which are the "build stage" and the "test stage". <br>
 
-## Name
-Choose a self-explaining name for your project.
+#### Build Stage
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Just like the normal pipelines, we just install the npm dependencies to the gitlab shared runner.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+#### Test Stage
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+We currently have only the unit tests. The script npm tun test:ci is used to test the whole project. <br>
+In the future, integration test stage may be implemented as well.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+### Tests for Create User
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+#### Should throw "Input missing data, All data required" when more then one mandatory data is missing.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+To avoid extremely long test time, we have decided to only test the case where the user forgot to provide the password information. <br>
+When one of the mandatory data is missing, our system throws a message exception that says "Input missing data, All data required". <br>
+Therefore, we test if the messageExceptionError is caught as an instance of MessageException and if the message of it is the same as expected. <br>
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+### Tests for Delete User
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+#### Should throw "Invalid id" when given a wrong userID.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+We test to figure out whether the system throws the error "Invalid id" when the given id is not registered in our database. <br>
+We expect to receive a MessageException with the error code 400 and message "Invalid id" <br>
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+### Tests for Login User
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+#### Should throw "Invalid data type" when the provided password type is not a string.
 
-## License
-For open source projects, say how it is licensed.
+We test to figure our whether the system throws the error "Invalid data type" when the given password is in a non-string format. <br>
+We expect to receive a MessageException "Invalid Data type" when provided a password in a format such as Number. <br>
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+#### Should throw "All input is required" when either email or SSN is not provided.
+
+We test to figure out whether the system throws the error "All input is required" when the SSN or Email is not provided. <br>
+We expect to receive a MessageException "All input is required". <br>
+
+### Tests for Get User
+
+#### Should throw "Invalid user ID" when the provided a user id that does not exist in our DB.
+
+We test to figure out whether the system throws the error "Invalid user ID" when the given id is not registered in our database. <br>
+We expect to receive a MessageException with the error code 400 and message "Invalid user ID". <br>
+
+#### Should return the user if found in our DB.
+
+We test to figure out whether the system returns the user information when a correct user id is provided. <br>
+We expect the result of the method getUser to be the same as the mockUser. <br>
+
+### Tests for Password Hash
+
+#### Should check if the password has been hashed before being saved to our DB.
+
+We test to figure out whether the hash function has been called with the provided password and whether it has been called only once. <br>
+
+## Contributions
+
+#### Users-Controller & User Schema
+
+Ahmed Ebrahim Ahmed Al Gabri(WRITE YOUR EMAIL) has created all of the methods for the users-controller and userSchema.
+
+#### Jest Tests & CI Pipeline
+
+David Boram Hong(guscholcda@student.gu.se) has created all of the tests and CI pipeline.
+
+#### DentistDocumentation
+
+David Boram Hong(guscholcda@student.gu.se) and Tehreem Asif (gusasite@student.gu.se) has taken care of all the documentation for this service.
