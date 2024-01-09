@@ -14,6 +14,7 @@ describe("deleteAllUsers", () => {
         admin: false,
         firstName: "David",
         lastName: "Hong",
+        blackList: false,
       },
       requestID: "someRequestId",
     };

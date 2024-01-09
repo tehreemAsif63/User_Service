@@ -1,39 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="11" failures="0" errors="0" time="9.556">
-  <testsuite name="deleteAllUsers" errors="0" failures="0" skipped="0" timestamp="2024-01-03T12:31:18" time="7.479" tests="1">
-    <testcase classname="deleteAllUsers should return forbidden" name="deleteAllUsers should return forbidden" time="0.029">
-    </testcase>
-  </testsuite>
-  <testsuite name="createUser" errors="0" failures="0" skipped="0" timestamp="2024-01-03T12:31:18" time="8.402" tests="2">
-    <testcase classname="createUser should throw MessageException for missing data" name="createUser should throw MessageException for missing data" time="0.014">
-    </testcase>
-    <testcase classname="createUser should return user already exists" name="createUser should return user already exists" time="0.013">
-    </testcase>
-  </testsuite>
-  <testsuite name="getUser function" errors="0" failures="0" skipped="0" timestamp="2024-01-03T12:31:18" time="8.583" tests="1">
-    <testcase classname="getUser function should return Invalid user ID when wrong userID" name="getUser function should return Invalid user ID when wrong userID" time="0.051">
-    </testcase>
-  </testsuite>
-  <testsuite name="updateSlots" errors="0" failures="0" skipped="0" timestamp="2024-01-03T12:31:18" time="8.747" tests="2">
-    <testcase classname="updateSlots should return user not found" name="updateSlots should return user not found" time="0.021">
-    </testcase>
-    <testcase classname="updateSlots should return input missing data, all data required" name="updateSlots should return input missing data, all data required" time="0.001">
-    </testcase>
-  </testsuite>
-  <testsuite name="deleteUser function" errors="0" failures="0" skipped="0" timestamp="2024-01-03T12:31:18" time="8.722" tests="1">
-    <testcase classname="deleteUser function should return Invalid id when wrong userID" name="deleteUser function should return Invalid id when wrong userID" time="0.02">
-    </testcase>
-  </testsuite>
-  <testsuite name="createUser" errors="0" failures="0" skipped="0" timestamp="2024-01-03T12:31:18" time="8.786" tests="1">
-    <testcase classname="createUser should hash the password before saving the user" name="createUser should hash the password before saving the user" time="0.009">
-    </testcase>
-  </testsuite>
-  <testsuite name="login a user" errors="0" failures="0" skipped="0" timestamp="2024-01-03T12:31:18" time="8.754" tests="3">
-    <testcase classname="login a user should return invalid data type when provided a not string type password" name="login a user should return invalid data type when provided a not string type password" time="0.009">
-    </testcase>
-    <testcase classname="login a user should return All input is required when either SSN or email is missing" name="login a user should return All input is required when either SSN or email is missing" time="0.001">
-    </testcase>
-    <testcase classname="login a user should return Invalid records" name="login a user should return Invalid records" time="0.008">
+<testsuites name="jest tests" tests="1" failures="0" errors="0" time="2.223">
+  <testsuite name="deleteAllUsers" errors="0" failures="0" skipped="0" timestamp="2024-01-09T03:31:32" time="2.114" tests="1">
+    <testcase classname="deleteAllUsers should return forbidden" name="deleteAllUsers should return forbidden" time="0.011">
     </testcase>
   </testsuite>
 </testsuites>
