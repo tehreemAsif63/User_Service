@@ -10,7 +10,7 @@ const userSchema = new Schema({
     required: [true, "Last name must be entered"],
   },
   SSN: { type: String, required: true, unique: true },
-  
+
   email: {
     type: String,
     required: [true, "Email must be set"],
@@ -23,6 +23,11 @@ const userSchema = new Schema({
   },
   password: { type: String, required: [true, "Password must be set"] },
   theme: { type: String, enum: ["light", "dark"], default: "light" },
+  blackList: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 });
 
 export default mongoose.model("User", userSchema);

@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import { MessageHandler, MessageData } from "../utilities/types-utils";
 import { FilterQuery } from "mongoose";
 
-const createUser: MessageHandler = async (data) => {
+export const createUser: MessageHandler = async (data) => {
   const { firstName, lastName, SSN, email, password, theme } = data;
 
   // validate the data of the patient
@@ -50,7 +50,7 @@ const createUser: MessageHandler = async (data) => {
 };
 
 // user login
-const login: MessageHandler = async (data) => {
+export const login: MessageHandler = async (data) => {
   const { SSN, email, password } = data;
   // Validate user input
   if (typeof password != "string") {
@@ -85,13 +85,13 @@ const login: MessageHandler = async (data) => {
   return user;
 };
 
-const getAllUsers: MessageHandler = async (data, requestInfo) => {
+export const getAllUsers: MessageHandler = async (data, requestInfo) => {
   let query: FilterQuery<User> = {};
   if (data.email) {
     query = { email: data.email };
   }
   const users = await UserSchema.find(query);
- 
+
   if (users === null) {
     throw new MessageException({
       code: 400,
@@ -103,7 +103,7 @@ const getAllUsers: MessageHandler = async (data, requestInfo) => {
 };
 
 // return user with a specific ID
-const getUser: MessageHandler = async (data, requestInfo) => {
+export const getUser: MessageHandler = async (data, requestInfo) => {
   const { user_id } = data;
 
   const user = await UserSchema.findById(user_id);
@@ -154,7 +154,7 @@ export const updateUser: MessageHandler = async (data) => {
 };
 
 // delete user with a specific ID
-const deleteUser: MessageHandler = async (data) => {
+export const deleteUser: MessageHandler = async (data) => {
   const { user_id } = data;
 
   const user = await UserSchema.findByIdAndDelete(user_id);
